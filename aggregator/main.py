@@ -1,13 +1,12 @@
 import asyncio
 import json
 import os
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import List, Dict, Any
 
-# استيراد جميع الـ Adapters
+# استيراد المحولات
 from adapters.shodan import ShodanAdapter
-from adapters.censys import CensysAdapter
+# from adapters.censys import CensysAdapter  # علق مؤقتاً
 from adapters.zoomeye import ZoomEyeAdapter
 from adapters.fofa import FofaAdapter
 from adapters.binaryedge import BinaryEdgeAdapter
@@ -18,7 +17,6 @@ from adapters.grayhat import GrayhatAdapter
 from adapters.netcraft import NetcraftAdapter
 from adapters.intelx import IntelXAdapter
 
-# استيراد الكاش والفورمات
 from cache import get_cache, set_cache
 from formatter import format_results
 
@@ -27,10 +25,10 @@ app = FastAPI()
 class SearchRequest(BaseModel):
     query: str
 
-# قائمة المحولات
+# قائمة المحولات النشطة
 adapters = [
     ShodanAdapter(),
-    CensysAdapter(),
+    # CensysAdapter(),  # علق مؤقتاً
     ZoomEyeAdapter(),
     FofaAdapter(),
     BinaryEdgeAdapter(),
@@ -49,7 +47,7 @@ async def search(req: SearchRequest):
     if cached:
         return json.loads(cached)
     
-    # تنفيذ البحث على جميع المحولات
+    # تنفيذ البحث على المحولات النشطة
     tasks = [adapter.search(req.query) for adapter in adapters]
     results = await asyncio.gather(*tasks, return_exceptions=True)
     
@@ -64,12 +62,8 @@ async def search(req: SearchRequest):
         else:
             merged.extend(res)
     
-    # تنسيق النتائج
     formatted = format_results(merged)
-    
-    # تخزين في الكاش
     await set_cache(req.query, json.dumps(formatted))
-    
     return formatted
 
 @app.get("/health")
