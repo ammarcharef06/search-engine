@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>محرك البحث الموحد</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>🔍 محرك البحث الشامل</h1>
+        <div id="auth">
+            <input type="password" id="p1" placeholder="كلمة المرور الأولى">
+            <input type="password" id="p2" placeholder="كلمة المرور الثانية">
+            <input type="password" id="p3" placeholder="كلمة المرور الثالثة">
+            <button onclick="authenticate()">تسجيل الدخول</button>
+        </div>
+        <div id="search" style="display:none">
+            <input type="text" id="query" placeholder="أدخل بحثك... (مثال: port:22)">
+            <button onclick="doSearch()">بحث</button>
+            <div id="results"></div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
