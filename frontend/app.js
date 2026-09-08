@@ -1,4 +1,7 @@
-const API_BASE = "https://search.your-domain.com";
+// استبدل الرابط الوهمي بالروابط الفعلية لخدماتك
+const AUTH_BASE = "https://auth-service-h31r.onrender.com";
+const API_BASE = "https://aggregator-ncjl.onrender.com";
+
 let sessionToken = "";
 
 async function authenticate() {
@@ -12,7 +15,7 @@ async function authenticate() {
     }
 
     try {
-        const res = await fetch(`${API_BASE}/auth`, {
+        const res = await fetch(`${AUTH_BASE}/auth`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ pass1: p1, pass2: p2, pass3: p3 })
@@ -57,7 +60,6 @@ async function doSearch() {
             return;
         }
 
-        // عرض النتائج
         resultsDiv.innerHTML = data.map(item => `
             <div class="result-item">
                 <span class="source">${item.source || "Unknown"}</span>
@@ -72,7 +74,6 @@ async function doSearch() {
     }
 }
 
-// البحث عند الضغط على Enter
 document.getElementById("query").addEventListener("keypress", function(e) {
     if (e.key === "Enter") doSearch();
 });
