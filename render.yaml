@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: auth-service
+    runtime: docker
+    repo: https://github.com/ammarcharef06/search-engine
+    rootDir: auth-service
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: PORT
+        value: 8081
+
+  - type: web
+    name: aggregator
+    runtime: docker
+    repo: https://github.com/ammarcharef06/search-engine
+    rootDir: aggregator
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: PORT
+        value: 8082
+      - key: REDIS_URL
+        value: redis://redis-xxxx:6379  # سيتم تحديثه لاحقاً
+
+  - type: static
+    name: frontend
+    repo: https://github.com/ammarcharef06/search-engine
+    rootDir: frontend
+    buildCommand: ""
+    publishPath: .
+    envVars:
+      - key: API_BASE
+        value: https://aggregator-ncjl.onrender.com
